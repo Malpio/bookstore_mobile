@@ -1,0 +1,14 @@
+{
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.tabCompletion": "on",
+  "cSpell.words": [
+    "camelize",
+    "decamelize",
+    "persistor",
+    "reduxjs",
+    "serializable",
+    "signin",
+    "signup"
+  ]
+}
