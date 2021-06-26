@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { removeUserData } from '../store/userSlice';
 import {
   RouteProp,
   NavigationProp,
@@ -8,22 +10,18 @@ import {
 
 import { Divider, List, ListItem, Text, Spinner } from '@ui-kitten/components';
 
-import { BookListItemType } from '../types/api/BookTypes';
-import { BooksNavigatorParamsType } from '../types/navigation/NavigationTypes';
+import { OrderType } from '../types/api/BookTypes';
+import { OrderNavigatorParamsType } from '../types/navigation/NavigationTypes';
 
 import useApiFetching from '../hooks/useApiFetching';
 import Colors from '../styles/Colors';
 
 type Props = {
-  route: RouteProp<BooksNavigatorParamsType, 'BooksListScreen'>;
-  navigation: NavigationProp<BooksNavigatorParamsType>;
+  navigation: NavigationProp<OrderNavigatorParamsType>;
 };
 
-const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { type } = route.params;
-  const { isFetching, data, refresh } = useApiFetching<BookListItemType[]>(
-    type === 'all' ? 'books' : 'myBooks',
-  );
+const BooksListScreen: React.FC<Props> = ({ navigation }) => {
+  const { isFetching, data, refresh } = useApiFetching<OrderType[]>('myOrders');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -40,17 +38,11 @@ const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
     );
   }
 
-  const goToBookDetails = (id: number) => {
-    navigation.navigate('BookDetailsScreen', { id });
+  const goToOrdersDetails = (id: number) => {
+    navigation.navigate('OrderDetailsScreen', { id });
   };
 
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: BookListItemType;
-    index: number;
-  }) => (
+  const renderItem = ({ item, index }: { item: OrderType; index: number }) => (
     <ListItem
       accessoryLeft={() => (
         <Image
@@ -58,10 +50,10 @@ const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
           style={styles.image}
         />
       )}
-      title={`${item.title}`}
-      description={`${item.author}`}
+      title={`${item.book.title}`}
+      description={`${item.book.author}`}
       style={styles.listItem}
-      onPress={() => goToBookDetails(item.id)}
+      onPress={() => goToOrdersDetails(item.id)}
     />
   );
 
@@ -74,7 +66,7 @@ const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
       renderItem={renderItem}
       ListEmptyComponent={
         <Text style={styles.emptyText} category={'h6'}>
-          Brak książek na liście
+          Brak zakupionych książek
         </Text>
       }
     />

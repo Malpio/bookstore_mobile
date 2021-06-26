@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-toast-message';
@@ -28,6 +28,8 @@ type Props = {
 const LoginScreen: React.FC<Props> = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (route.params?.register) {
       Toast.show({
@@ -39,15 +41,22 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }) => {
   }, [route.params]);
 
   const login = async (data: LoginFormType) => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
     try {
       const response = await request.post<UserType>(points.login, data);
       dispatch(setUserData(response.data));
+      console.log(response);
     } catch (error) {
       Toast.show({
         type: 'error',
         text1: 'Nieprawidłowe dane logowania!',
         visibilityTime: 3000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,7 +77,7 @@ const LoginScreen: React.FC<Props> = ({ route, navigation }) => {
               Logowanie
             </Text>
           </View>
-          <LoginForm onSubmit={login} />
+          <LoginForm loading={loading} onSubmit={login} />
         </View>
         <View style={styles.bottomContainer}>
           <Text style={GlobalStyles.information}>Nie masz jeszcze konta?</Text>

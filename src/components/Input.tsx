@@ -4,7 +4,11 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import {
+  StyleSheet,
+  TouchableWithoutFeedback,
+  KeyboardTypeOptions,
+} from 'react-native';
 import {
   Input as KittenInput,
   Icon as KittenIcon,
@@ -17,6 +21,7 @@ export enum InputType {
   USERNAME = 'username',
   PASSWORD = 'password',
   EMAIL = 'email',
+  PRICE = 'price',
 }
 
 interface IProps {
@@ -28,6 +33,7 @@ interface IProps {
   error: any;
   required?: boolean;
   onIconPress?: () => void;
+  validate?: (value: string) => boolean;
 }
 
 const useInputConfig = (
@@ -36,10 +42,23 @@ const useInputConfig = (
 ): {
   renderInputIcon?: (props: IconProps) => JSX.Element;
   secureTextEntry?: boolean;
+  keyboardType?: KeyboardTypeOptions;
 } => {
   const [secureTextEntry, setSecureTextEntry] = useState(
     type === InputType.PASSWORD,
   );
+
+  const keyboardTypes: { [key in InputType]: KeyboardTypeOptions } =
+    React.useMemo(
+      () => ({
+        default: 'default',
+        username: 'default',
+        password: 'default',
+        email: 'email-address',
+        price: 'numeric',
+      }),
+      [type],
+    );
 
   const changeSecureState = useCallback(() => {
     setSecureTextEntry(!secureTextEntry);
@@ -50,6 +69,7 @@ const useInputConfig = (
       password: secureTextEntry ? 'eye-off' : 'eye',
       email: 'email-outline',
       username: 'person-outline',
+      price: 'pricetags-outline',
     }),
     [secureTextEntry, type],
   );
@@ -60,6 +80,7 @@ const useInputConfig = (
       email: onPress,
       username: onPress,
       default: onPress,
+      price: onPress,
     }),
     [changeSecureState],
   );
@@ -75,6 +96,7 @@ const useInputConfig = (
   return {
     renderInputIcon,
     secureTextEntry,
+    keyboardType: keyboardTypes[type],
   };
 };
 
@@ -87,8 +109,9 @@ const Input: FunctionComponent<IProps> = ({
   type = InputType.DEFAULT,
   required,
   onIconPress,
+  validate,
 }: IProps) => {
-  const { renderInputIcon, secureTextEntry } = useInputConfig(
+  const { renderInputIcon, secureTextEntry, keyboardType } = useInputConfig(
     type,
     onIconPress,
   );
@@ -98,7 +121,7 @@ const Input: FunctionComponent<IProps> = ({
       control={control}
       defaultValue={defaultValue}
       name={name}
-      rules={{ required }}
+      rules={{ required, validate }}
       render={({ field: { onChange, onBlur, value } }) => (
         <KittenInput
           style={styles.input}
@@ -109,6 +132,7 @@ const Input: FunctionComponent<IProps> = ({
           onChangeText={(value) => onChange(value)}
           onBlur={onBlur}
           accessoryRight={renderInputIcon}
+          keyboardType={keyboardType}
         />
       )}
     />

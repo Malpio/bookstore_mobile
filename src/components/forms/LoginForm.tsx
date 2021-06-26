@@ -9,9 +9,10 @@ import { LoginFormType } from '../../types/components/forms/LoginFormType';
 
 type Props = {
   onSubmit: (data: LoginFormType) => void;
+  loading?: boolean;
 };
 
-const LoginForm: React.VFC<Props> = ({ onSubmit }) => {
+const LoginForm: React.VFC<Props> = ({ onSubmit, loading }) => {
   const {
     control,
     handleSubmit,
@@ -40,6 +41,7 @@ const LoginForm: React.VFC<Props> = ({ onSubmit }) => {
         onPress={handleSubmit(onSubmit)}
         style={styles.buttonContainer}
         text={'Zaloguj'}
+        loading={loading}
       />
     </View>
   );

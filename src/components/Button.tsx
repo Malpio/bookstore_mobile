@@ -1,12 +1,15 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle, ImageProps } from 'react-native';
 import { Button as KittenButton, Spinner } from '@ui-kitten/components';
+import { RenderProp, EvaStatus } from '@ui-kitten/components/devsupport';
 
 interface IProps {
   text: string;
   onPress?: () => void;
   loading?: boolean;
   style?: ViewStyle;
+  status?: EvaStatus;
+  accessoryRight?: RenderProp<Partial<ImageProps>>;
 }
 
 const LoadingIndicator = () => (
@@ -20,12 +23,16 @@ const Button: FunctionComponent<IProps> = ({
   onPress,
   loading,
   style,
+  status,
+  accessoryRight,
 }: IProps) => {
   return (
     <KittenButton
       style={[styles.button, style]}
       appearance="outline"
       onPress={onPress}
+      status={status}
+      accessoryRight={accessoryRight}
       accessoryLeft={loading ? LoadingIndicator : undefined}>
       {text.toUpperCase()}
     </KittenButton>

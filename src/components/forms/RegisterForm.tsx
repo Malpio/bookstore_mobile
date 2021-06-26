@@ -9,14 +9,28 @@ import { RegisterFormType } from '../../types/components/forms/RegisterFormType'
 
 type Props = {
   onSubmit: (data: RegisterFormType) => void;
+  loading?: boolean;
 };
 
-const RegisterForm: React.VFC<Props> = ({ onSubmit }) => {
+const RegisterForm: React.VFC<Props> = ({ onSubmit, loading }) => {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<RegisterFormType>();
+
+  const passwordValidate = (password: string) => {
+    return password === getValues('repeatPassword');
+  };
+
+  const repeatPasswordValidate = (password: string) => {
+    return password === getValues('password');
+  };
+
+  const emailValid = (email: string) => {
+    return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+  };
 
   return (
     <View>
@@ -27,6 +41,7 @@ const RegisterForm: React.VFC<Props> = ({ onSubmit }) => {
         type={InputType.EMAIL}
         placeholder={'e-mail'}
         required
+        validate={emailValid}
       />
       <Input
         name={'username'}
@@ -42,12 +57,23 @@ const RegisterForm: React.VFC<Props> = ({ onSubmit }) => {
         error={errors.password}
         type={InputType.PASSWORD}
         placeholder={'hasło'}
+        validate={passwordValidate}
+        required
+      />
+      <Input
+        name={'repeatPassword'}
+        control={control}
+        error={errors.repeatPassword}
+        type={InputType.PASSWORD}
+        placeholder={'powtórz hasło'}
+        validate={repeatPasswordValidate}
         required
       />
       <Button
         onPress={handleSubmit(onSubmit)}
         style={styles.buttonContainer}
         text={'Zarejestruj'}
+        loading={loading}
       />
     </View>
   );

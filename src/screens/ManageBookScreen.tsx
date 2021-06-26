@@ -1,29 +1,34 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { NavigationProp, useFocusEffect } from '@react-navigation/native';
+
 import {
-  RouteProp,
-  NavigationProp,
-  useFocusEffect,
-} from '@react-navigation/native';
-
-import { Divider, List, ListItem, Text, Spinner } from '@ui-kitten/components';
-
-import { BookListItemType } from '../types/api/BookTypes';
-import { BooksNavigatorParamsType } from '../types/navigation/NavigationTypes';
+  Divider,
+  List,
+  ListItem,
+  Text,
+  Spinner,
+  Icon,
+} from '@ui-kitten/components';
 
 import useApiFetching from '../hooks/useApiFetching';
 import Colors from '../styles/Colors';
 
+import { BookListItemType } from '../types/api/BookTypes';
+
+import { MoreNavigatorParamsType } from '../types/navigation/NavigationTypes';
+
 type Props = {
-  route: RouteProp<BooksNavigatorParamsType, 'BooksListScreen'>;
-  navigation: NavigationProp<BooksNavigatorParamsType>;
+  navigation: NavigationProp<MoreNavigatorParamsType>;
 };
 
-const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { type } = route.params;
-  const { isFetching, data, refresh } = useApiFetching<BookListItemType[]>(
-    type === 'all' ? 'books' : 'myBooks',
-  );
+const BookIcon = (props: any) => <Icon {...props} name="book-outline" />;
+
+const EditIcon = (props: any) => <Icon {...props} name="edit-2-outline" />;
+
+const ManageBookScreen: React.FC<Props> = ({ navigation }) => {
+  const { isFetching, data, refresh } =
+    useApiFetching<BookListItemType[]>('books');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -40,8 +45,8 @@ const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
     );
   }
 
-  const goToBookDetails = (id: number) => {
-    navigation.navigate('BookDetailsScreen', { id });
+  const goToBookEdit = (id: number) => {
+    navigation.navigate('EditBookScreen', { id });
   };
 
   const renderItem = ({
@@ -52,16 +57,11 @@ const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
     index: number;
   }) => (
     <ListItem
-      accessoryLeft={() => (
-        <Image
-          source={require('../assets/images/book-cover-placeholder.png')}
-          style={styles.image}
-        />
-      )}
+      accessoryLeft={BookIcon}
+      accessoryRight={EditIcon}
       title={`${item.title}`}
-      description={`${item.author}`}
       style={styles.listItem}
-      onPress={() => goToBookDetails(item.id)}
+      onPress={() => goToBookEdit(item.id)}
     />
   );
 
@@ -81,7 +81,7 @@ const BooksListScreen: React.FC<Props> = ({ route, navigation }) => {
   );
 };
 
-export default BooksListScreen;
+export default ManageBookScreen;
 
 const styles = StyleSheet.create({
   container: {

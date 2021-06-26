@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -21,7 +21,13 @@ type Props = {
 };
 
 const RegisterScreen: React.FC<Props> = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+
   const register = async (data: RegisterFormType) => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
     try {
       await request.post(points.register, { ...data, roles: ['user'] });
       navigation.navigate('LoginScreen', { register: true });
@@ -32,6 +38,8 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         text2: 'Użytkownik o tym e-mailu lub nazwie użytkownika już istnieje!',
         visibilityTime: 3000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +60,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
               Rejestracja
             </Text>
           </View>
-          <RegisterForm onSubmit={register} />
+          <RegisterForm loading={loading} onSubmit={register} />
         </View>
         <View style={styles.bottomContainer}>
           <Text style={GlobalStyles.information}>Masz już konto?</Text>
