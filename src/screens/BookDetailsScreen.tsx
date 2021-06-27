@@ -217,16 +217,11 @@ const BookDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
       </View>
       <View style={styles.section}>
         <Text category={'h6'}>Zamów książkę</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: 15,
-          }}>
+        <View style={styles.orderContainer}>
           <Icon
             fill={Colors.BLACK}
             name={'shopping-cart-outline'}
-            style={{ height: 25, width: 25, marginRight: 10 }}
+            style={styles.icon}
           />
           <Text category={'s1'}>{`Cena: ${data.book.price.toFixed(
             2,
@@ -275,6 +270,12 @@ const BookDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
 export default BookDetailsScreen;
 
 const styles = StyleSheet.create({
+  icon: { height: 25, width: 25, marginRight: 10 },
+  orderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.BACKGROUND,

@@ -51,23 +51,18 @@ const OrderBookScreen: React.FC<Props> = ({ route, navigation }) => {
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
       <View style={styles.section}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={styles.header}>
           <View>
             <Text category={'h6'}>{title}</Text>
             <Text style={styles.authorText} category={'s2'}>
               {author}
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: 15,
-            }}>
+          <View style={styles.orderContainer}>
             <Icon
               fill={Colors.BLACK}
               name={'shopping-cart-outline'}
-              style={{ height: 25, width: 25, marginRight: 10 }}
+              style={styles.icon}
             />
             <Text category={'s1'}>{`Cena: ${price.toFixed(2)} zł`}</Text>
           </View>
@@ -81,6 +76,17 @@ const OrderBookScreen: React.FC<Props> = ({ route, navigation }) => {
 export default OrderBookScreen;
 
 const styles = StyleSheet.create({
+  icon: {
+    height: 25,
+    width: 25,
+    marginRight: 10,
+  },
+  orderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  header: { flexDirection: 'row', justifyContent: 'space-between' },
   container: {
     flex: 1,
     backgroundColor: Colors.BACKGROUND,

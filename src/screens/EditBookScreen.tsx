@@ -102,6 +102,15 @@ const EditBookScreen: React.FC<Props> = ({ route, navigation }) => {
     );
   }
 
+  const defaultData = React.useMemo(
+    () => ({
+      author: data.book.author,
+      price: data.book.price,
+      title: data.book.title,
+    }),
+    [data],
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.header} category={'h5'}>
@@ -109,11 +118,7 @@ const EditBookScreen: React.FC<Props> = ({ route, navigation }) => {
       </Text>
       <AddBookForm
         buttonText={'Edytuj książkę'}
-        defaultData={{
-          author: data.book.author,
-          price: data.book.price,
-          title: data.book.title,
-        }}
+        defaultData={defaultData}
         loading={loading}
         onSubmit={editBook}
       />

@@ -36,23 +36,18 @@ const OrderDetailsScreen: React.FC<Props> = ({ route }) => {
       style={styles.container}
       contentContainerStyle={styles.contentContainer}>
       <View style={styles.section}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={styles.header}>
           <View>
             <Text category={'h6'}>{data.book.title}</Text>
             <Text style={styles.authorText} category={'s2'}>
               {data.book.author}
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: 15,
-            }}>
+          <View style={styles.orderContainer}>
             <Icon
               fill={Colors.BLACK}
               name={'shopping-cart-outline'}
-              style={{ height: 25, width: 25, marginRight: 10 }}
+              style={styles.icon}
             />
             <Text category={'s1'}>{`Cena: ${data.book.price.toFixed(
               2,
@@ -63,10 +58,10 @@ const OrderDetailsScreen: React.FC<Props> = ({ route }) => {
       <View style={styles.section}>
         <Text category={'h6'}>Dane dostawy</Text>
         <Text
-          style={{ marginTop: 10 }}
+          style={styles.text}
           category={'s2'}>{`Imie i nazwisko: ${data.customerFullName}`}</Text>
         <Text
-          style={{ marginTop: 10 }}
+          style={styles.text}
           category={'s2'}>{`Adres wysyłki:\n${data.deliverFullAddress}`}</Text>
       </View>
     </ScrollView>
@@ -76,6 +71,23 @@ const OrderDetailsScreen: React.FC<Props> = ({ route }) => {
 export default OrderDetailsScreen;
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  icon: {
+    height: 25,
+    width: 25,
+    marginRight: 10,
+  },
+  orderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  text: {
+    marginTop: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.BACKGROUND,
