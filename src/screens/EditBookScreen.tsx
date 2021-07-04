@@ -41,6 +41,16 @@ const EditBookScreen: React.FC<Props> = ({ route, navigation }) => {
     id,
   );
 
+  const defaultData = React.useMemo(() => {
+    if (data) {
+      return {
+        author: data.book.author,
+        price: data.book.price,
+        title: data.book.title,
+      };
+    }
+  }, [data]);
+
   const editBook = async (data: AddBookFormType) => {
     if (loading) {
       return;
@@ -101,15 +111,6 @@ const EditBookScreen: React.FC<Props> = ({ route, navigation }) => {
       </View>
     );
   }
-
-  const defaultData = React.useMemo(
-    () => ({
-      author: data.book.author,
-      price: data.book.price,
-      title: data.book.title,
-    }),
-    [data],
-  );
 
   return (
     <View style={styles.container}>
